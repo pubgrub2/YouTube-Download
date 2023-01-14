@@ -23,8 +23,9 @@ def getVideo(link):
 	videoPath = biggestVideo.download(output_path = "temp/", filename_prefix = "video_")
 
 	if needsCombine == True:
-		textlist = open("temp/list.txt")
-		textlist.write("file \"" + str(videoPath) + "\"\n" + "file \"" + str(audioPath) + "\"")
+		textlist = open("temp/list.txt", "w")
+		textlist.write("file \'" + videoPath.replace("\\", "/") + "\'\n" + "file \'" + audioPath.replace("\\", "/") + "\'")
+		textlist.close()
 		# input_video = ffmpeg.input(videoPath)
 		# input_audio = ffmpeg.input(audioPath)
 		(
