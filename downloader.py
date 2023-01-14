@@ -1,4 +1,5 @@
 from pytube import YouTube
+from moviepy.editor import VideoFileClip, AudioFileClip
 import ffmpeg
 
 def getVideo(link):
@@ -23,17 +24,21 @@ def getVideo(link):
 	videoPath = biggestVideo.download(output_path = "temp/", filename_prefix = "video_")
 
 	if needsCombine == True:
-		textlist = open("temp/list.txt", "w")
-		textlist.write("file \'" + videoPath.replace("\\", "/") + "\'\n" + "file \'" + audioPath.replace("\\", "/") + "\'")
-		textlist.close()
+		video = VideoFileClip(videoPath)
+		audio = AudioFileClip(audioPath)
+		finalvideo = video.set_audio(audio)
+		finalvideo.write_videofile("output/" + biggestVideo.default_filename)
+		# textlist = open("temp/list.txt", "w")
+		# textlist.write("file \'" + videoPath.replace("\\", "/") + "\'\n" + "file \'" + audioPath.replace("\\", "/") + "\'")
+		# textlist.close()
 		# input_video = ffmpeg.input(videoPath)
 		# input_audio = ffmpeg.input(audioPath)
-		(
-			ffmpeg
-			.input("temp/list.txt", format="concat", safe=0)
-			.output("output/" + biggestVideo.default_filename, c="copy")
-			.run()
-		)
+		# (
+		# 	ffmpeg
+		# 	.input("temp/list.txt", format="concat", safe=0)
+		# 	.output("output/" + biggestVideo.default_filename, c="copy")
+		# 	.run()
+		# )
 		# ffmpeg.concat(input_video, input_audio, v=1, a=1).output("output/" + biggestVideo.default_filename, c="copy").run()
 
 getVideo("https://www.youtube.com/watch?v=tPZRdUnV2vg")
